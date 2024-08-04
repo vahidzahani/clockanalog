@@ -2,12 +2,18 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
 
 namespace clockanalog
 {
     public partial class Form1 : Form
     {
         private System.Windows.Forms.Timer clockTimer;
+        private int lastMinute;
+
+        // Import the MessageBeep function from user32.dll
+        [DllImport("user32.dll")]
+        public static extern bool MessageBeep(uint uType);
 
         public Form1()
         {
@@ -23,10 +29,20 @@ namespace clockanalog
             clockTimer.Interval = 1000; // 1 second
             clockTimer.Tick += new EventHandler(this.OnTimerTick);
             clockTimer.Start();
+
+            lastMinute = DateTime.Now.Minute;
         }
 
         private void OnTimerTick(object sender, EventArgs e)
         {
+
+            DateTime now = DateTime.Now;
+            if (now.Minute != lastMinute)
+            {
+                MessageBeep(0xFFFFFFFF); // Play the system beep sound
+                lastMinute = now.Minute;
+            }
+
             this.Invalidate(); // Force the form to be redrawn
         }
 
@@ -82,7 +98,6 @@ namespace clockanalog
             // Draw center circle
             int centerCircleRadius = 20;
             g.FillEllipse(Brushes.Black, centerX - centerCircleRadius, centerY - centerCircleRadius, centerCircleRadius * 2, centerCircleRadius * 2);
-
         }
 
         private void DrawHand(Graphics g, int centerX, int centerY, double angle, float length, int width, Brush brush)
