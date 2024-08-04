@@ -78,6 +78,11 @@ namespace clockanalog
 
             // Draw second hand
             DrawHand(g, centerX, centerY, secondAngle, radius * 0.9f, 5, Brushes.Red);
+
+            // Draw center circle
+            int centerCircleRadius = 20;
+            g.FillEllipse(Brushes.Black, centerX - centerCircleRadius, centerY - centerCircleRadius, centerCircleRadius * 2, centerCircleRadius * 2);
+
         }
 
         private void DrawHand(Graphics g, int centerX, int centerY, double angle, float length, int width, Brush brush)
